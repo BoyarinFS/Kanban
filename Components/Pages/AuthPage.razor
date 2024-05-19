@@ -1,0 +1,27 @@
+@using Kanban_Release.Components.Models
+@page "/authpage"
+@rendermode InteractiveServer
+
+<label for="username">Username</label>
+<input type="text" id="username" @bind="Username" />
+
+<label for="password">Password</label>
+<input type="password" id="password" @bind="Password" />
+
+<button class="btn btn-primary" @onclick="HandleAuthentication">Login</button>
+
+<p>@if (token != "") @token</p>
+
+
+@code {
+    private string Username { get; set; }
+    private string Password { get; set; }
+    private static string token { get; set; }
+
+    private async Task HandleAuthentication()
+    {
+        AuthResponse response = await ServiceRequest.SendLoginRequest(new Models.AuthRequest{ login = Username, password = Password });
+
+        token = response.token;
+    }
+}
